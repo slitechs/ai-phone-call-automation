@@ -1,4 +1,4 @@
-const { Pool } = require('pg');
+import { Pool } from 'pg';
 
 // Database migration script to add vapi_call_id column
 async function migrateDatabase() {

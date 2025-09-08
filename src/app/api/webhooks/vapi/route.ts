@@ -86,7 +86,7 @@ async function handleCallEnd(conversationId: number, webhookData: any) {
     try {
       await ConversationService.updateConversationSummary(
         conversationId, 
-        `Call completed with error: ${error.message}`
+        `Call completed with error: ${error instanceof Error ? error.message : 'Unknown error'}`
       );
     } catch (fallbackError) {
       console.error('Fallback summary update also failed:', fallbackError);
