@@ -1,28 +1,22 @@
 import { NextResponse } from 'next/server';
+import { ConversationService } from '../../../lib/conversation-service';
+import '../../../lib/init-db';
 
 export async function GET() {
   try {
-    // TODO: Fetch from database when database is set up
-    // For now, return mock data
-    const mockConversations = [
-      {
-        callId: 1,
-        date: new Date().toISOString(),
-        patientName: 'John Doe',
-        phoneNumber: '+1 123-555-0123',
-        summary: 'Patient confirmed availability for delivery tomorrow at 2 PM. No medication changes needed. Previous shipment was received without issues.'
-      },
-      {
-        callId: 2,
-        date: new Date(Date.now() - 86400000).toISOString(), // Yesterday
-        patientName: 'Jane Smith',
-        phoneNumber: '+1 123-555-0456',
-        summary: 'Patient requested delivery time change to evening hours. Mentioned missing one dose last week. No issues with last shipment.'
-      }
-    ];
+    const conversations = await ConversationService.getAllConversations();
+    
+    // Transform database format to frontend format
+    const formattedConversations = conversations.map(conv => ({
+      callId: conv.call_id,
+      date: conv.date,
+      patientName: conv.patient_name,
+      phoneNumber: conv.phone_number,
+      summary: conv.summary
+    }));
 
     return NextResponse.json({
-      conversations: mockConversations
+      conversations: formattedConversations
     });
 
   } catch (error) {

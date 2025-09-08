@@ -1,4 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { ConversationService } from '../../../lib/conversation-service';
+import '../../../lib/init-db';
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,16 +13,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Create conversation record in database
+    const conversation = await ConversationService.createConversation(
+      patientName,
+      phoneNumber,
+      'Call initiated - summary will be updated after call completion'
+    );
+
     // TODO: Integrate with Vapi to make the actual call
     // For now, we'll simulate a successful call
-    const callId = Math.floor(Math.random() * 10000) + 1;
-    
-    // TODO: Save to database when database is set up
-    console.log('Call initiated:', { callId, patientName, phoneNumber });
+    console.log('Call initiated:', { 
+      callId: conversation.call_id, 
+      patientName, 
+      phoneNumber 
+    });
 
     return NextResponse.json({
       success: true,
-      callId,
+      callId: conversation.call_id,
       message: 'Call initiated successfully'
     });
 
