@@ -19,7 +19,6 @@ export async function POST() {
     const updatedConversations = [];
     
       for (const conv of conversations) {
-        if (conv.summary === 'Call initiated - summary will be updated after call completion') {
           try {
             // Use the stored Vapi call ID
             const vapiCallId = conv.vapi_call_id;
@@ -46,7 +45,7 @@ export async function POST() {
               console.log(`Updated conversation ${conv.call_id} with Vapi summary`);
             } else {
               // Fallback to a basic summary if no Vapi summary available
-              const fallbackSummary = `New Call completed. Patient: ${conv.patient_name}. Phone: ${conv.phone_number}. No detailed summary available from Vapi.`;
+              const fallbackSummary = `New Call completed. Patient: ${conv.patient_name}. Phone: ${conv.phone_number}. No detailed summary available from Vapi (call may have been too short).`;
               const updated = await ConversationService.updateConversationSummary(
                 conv.call_id, 
                 fallbackSummary
