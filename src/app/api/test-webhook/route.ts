@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ConversationService } from '../../../lib/conversation-service';
-import { AIService } from '../../../lib/ai-service';
 import '../../../lib/init-db';
 
 export async function POST(request: NextRequest) {
@@ -14,15 +13,10 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Generate AI summary
+    // Generate basic summary
     let summary = 'Test summary generated';
     if (transcript) {
-      try {
-        summary = await AIService.generateConversationSummary(transcript);
-      } catch (error) {
-        console.error('AI summary generation failed:', error);
-        summary = `Call completed. Transcript: ${transcript.substring(0, 200)}...`;
-      }
+      summary = `Call completed. Transcript: ${transcript.substring(0, 200)}...`;
     }
 
     // Update the conversation

@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { ConversationService } from '../../../../lib/conversation-service';
-import { AIService } from '../../../../lib/ai-service';
 import '../../../../lib/init-db';
 
 export async function POST(request: NextRequest) {
@@ -59,7 +58,7 @@ async function handleCallEnd(conversationId: number, webhookData: any) {
     
     let callSummary = '';
     
-    // Priority order: Vapi analysis summary > webhook summary > AI-generated summary > fallback
+    // Priority order: Vapi analysis summary > webhook summary > fallback
     if (analysis?.summary) {
       callSummary = analysis.summary;
       console.log('Using Vapi analysis summary:', callSummary);
@@ -67,15 +66,8 @@ async function handleCallEnd(conversationId: number, webhookData: any) {
       callSummary = summary;
       console.log('Using webhook summary:', callSummary);
     } else if (transcript) {
-      // Generate AI summary from transcript
-      try {
-        console.log('Generating AI summary from transcript...');
-        callSummary = await AIService.generateConversationSummary(transcript);
-        console.log('AI summary generated:', callSummary);
-      } catch (aiError) {
-        console.error('AI summary generation failed:', aiError);
-        callSummary = `Call completed. Duration: ${Math.round((duration || 0) / 60)} minutes. End reason: ${endReason || 'Unknown'}. Full transcript available.`;
-      }
+      // Use transcript directly or create a basic summary
+      callSummary = `Call completed. Duration: ${Math.round((duration || 0) / 60)} minutes. End reason: ${endReason || 'Unknown'}. Full transcript available.`;
     } else {
       callSummary = `Call completed. Duration: ${Math.round((duration || 0) / 60)} minutes. End reason: ${endReason || 'Unknown'}.`;
     }

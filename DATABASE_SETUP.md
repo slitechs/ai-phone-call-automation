@@ -29,12 +29,9 @@ This application uses PostgreSQL to store conversation data. Follow these steps 
    
    # Vapi Configuration
    VAPI_API_KEY=your_vapi_api_key_here
-   
-   # OpenAI Configuration (for AI summaries)
-   OPENAI_API_KEY=your_openai_api_key_here
    ```
    
-   Replace `username` and `password` with your PostgreSQL credentials, and add your Vapi and OpenAI API keys.
+   Replace `username` and `password` with your PostgreSQL credentials, and add your Vapi API key.
 
 3. **Install dependencies**:
    ```bash
@@ -76,8 +73,7 @@ https://your-domain.com/api/webhooks/vapi
 
 This webhook will:
 - Receive call completion notifications
-- Generate AI summaries of conversations
-- Update the database with call results
+- Update the database with call results and summaries
 
 ## Production Setup
 
