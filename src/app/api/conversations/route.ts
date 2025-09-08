@@ -12,7 +12,8 @@ export async function GET() {
       date: conv.date,
       patientName: conv.patient_name,
       phoneNumber: conv.phone_number,
-      summary: conv.summary
+      summary: conv.summary,
+      vapiCallId: conv.vapi_call_id
     }));
 
     return NextResponse.json({

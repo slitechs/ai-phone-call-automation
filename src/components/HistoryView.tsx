@@ -8,6 +8,7 @@ interface Conversation {
   patientName: string;
   phoneNumber: string;
   summary: string;
+  vapiCallId?: string;
 }
 
 export default function HistoryView() {
@@ -16,12 +17,43 @@ export default function HistoryView() {
   const [error, setError] = useState<string>('');
 
   useEffect(() => {
-    fetchConversations();
+    fetchConversationsWithSummaries();
   }, []);
 
   const fetchConversations = async () => {
     try {
       setLoading(true);
+      const response = await fetch('/api/conversations');
+      
+      if (!response.ok) {
+        throw new Error('Failed to fetch conversations');
+      }
+      
+      const data = await response.json();
+      setConversations(data.conversations || []);
+    } catch (error) {
+      setError('Error loading conversation history');
+      console.error('Fetch error:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchConversationsWithSummaries = async () => {
+    try {
+      setLoading(true);
+      
+      // First, try to update summaries from Vapi
+      const updateResponse = await fetch('/api/update-summaries', {
+        method: 'POST',
+      });
+      
+      if (updateResponse.ok) {
+        const updateData = await updateResponse.json();
+        console.log('Summaries updated from Vapi:', updateData);
+      }
+      
+      // Then fetch the updated conversations
       const response = await fetch('/api/conversations');
       
       if (!response.ok) {
@@ -93,7 +125,7 @@ export default function HistoryView() {
             Call History
           </h2>
           <button
-            onClick={fetchConversations}
+            onClick={fetchConversationsWithSummaries}
             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 transition-colors"
           >
             Refresh

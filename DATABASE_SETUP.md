@@ -24,10 +24,17 @@ This application uses PostgreSQL to store conversation data. Follow these steps 
 2. **Set environment variables**:
    Create a `.env.local` file in the project root:
    ```env
+   # Database Configuration
    DATABASE_URL=postgresql://username:password@localhost:5432/phone_call_automation
+   
+   # Vapi Configuration
+   VAPI_API_KEY=your_vapi_api_key_here
+   
+   # OpenAI Configuration (for AI summaries)
+   OPENAI_API_KEY=your_openai_api_key_here
    ```
    
-   Replace `username` and `password` with your PostgreSQL credentials.
+   Replace `username` and `password` with your PostgreSQL credentials, and add your Vapi and OpenAI API keys.
 
 3. **Install dependencies**:
    ```bash
@@ -59,6 +66,19 @@ CREATE TABLE conversations (
 - **Authentication failed**: Check your username/password in DATABASE_URL
 - **Database doesn't exist**: Create the database first with `createdb phone_call_automation`
 
+## Vapi Webhook Configuration
+
+To receive call completion updates and transcripts, configure your Vapi assistant with this webhook URL:
+
+```
+https://your-domain.com/api/webhooks/vapi
+```
+
+This webhook will:
+- Receive call completion notifications
+- Generate AI summaries of conversations
+- Update the database with call results
+
 ## Production Setup
 
 For production deployment, use a managed PostgreSQL service like:
@@ -69,3 +89,5 @@ For production deployment, use a managed PostgreSQL service like:
 - Railway
 
 Update your `DATABASE_URL` environment variable with the production connection string.
+
+Make sure to configure your Vapi webhook URL to point to your production domain.
