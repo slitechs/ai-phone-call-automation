@@ -50,11 +50,12 @@ export async function POST(request: NextRequest) {
   }
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 async function handleCallEnd(conversationId: number, webhookData: any) {
   try {
     console.log('Handling call end for conversation:', conversationId, 'with data:', webhookData);
     
-    const { transcript, summary, endReason, duration, call, analysis } = webhookData;
+    const { transcript, summary, endReason, duration, analysis } = webhookData;
     
     let callSummary = '';
     
