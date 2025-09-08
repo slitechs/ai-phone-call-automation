@@ -74,7 +74,6 @@ export async function POST() {
           );
           updatedConversations.push(updated);
         }
-      }
     }
 
     return NextResponse.json({
